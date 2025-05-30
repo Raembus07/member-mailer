@@ -1,124 +1,52 @@
 package ch.josiaschweizer.view.step3;
 
-import ch.josiaschweizer.controller.ProcessFile;
-import ch.josiaschweizer.entity.factory.UserFactory;
-import ch.josiaschweizer.publ.Publ;
-import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javax.annotation.Nonnull;
-import java.io.File;
-import java.util.logging.Logger;
 
 public class StepThreeUI {
-    private final Stage loadingStage = new Stage();
-    private final Logger logger;
-    private final File file;
-    private final String getuAkroSubject, erwachsenSubject, getuAkroText, erwachsenText;
 
-    public StepThreeUI(@Nonnull File file,
-                       @Nonnull String getuAkroSubject,
-                       @Nonnull String erwachsenSubject,
-                       @Nonnull String getuAkroText,
-                       @Nonnull String erwachsenText,
-                       @Nonnull Logger logger) {
-        this.file = file;
-        this.getuAkroSubject = getuAkroSubject;
-        this.erwachsenSubject = erwachsenSubject;
-        this.getuAkroText = getuAkroText;
-        this.erwachsenText = erwachsenText;
-        this.logger = logger;
+    private final TextField emailField = new TextField();
+    private final PasswordField appPasswordField = new PasswordField();
+    private final Button sendButton;
+    private final VBox root;
+
+    public StepThreeUI(@Nonnull final Runnable runnable) {
+        root = new VBox(12);
+        root.setPadding(new Insets(24));
+        sendButton = new Button("Send Emails");
+        sendButton.setOnMouseClicked(event -> {
+            runnable.run();
+        });
+        root.getChildren().addAll(
+                new Label("Enter your email address:"),
+                emailField,
+                new Label("Enter your app password:"),
+                appPasswordField,
+                sendButton
+        );
+
     }
 
-    public void show() {
-        loadingStage.initModality(Modality.APPLICATION_MODAL);
-        loadingStage.setTitle("Sending Emails...");
+    public void show(@Nonnull final Stage stage) {
+        stage.setTitle("Enter Email Credentials");
+        stage.setScene(new Scene(root, 400, 250));
+        stage.setResizable(false);
+        stage.show();
+    }
 
-        final var progressBar = new ProgressBar();
-        progressBar.setPrefWidth(300);
-        progressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+    public String getEmail() {
+        return emailField.getText();
+    }
 
-        final var logArea = new javafx.scene.control.TextArea();
-        logArea.setEditable(false);
-        logArea.setPrefHeight(200);
-
-        final var vbox = new VBox(10, new Label("Sending emails, please wait..."), progressBar, logArea);
-        vbox.setStyle("-fx-padding: 20;");
-        loadingStage.setScene(new Scene(vbox));
-        loadingStage.setResizable(false);
-
-        class LevelTrackingHandler extends java.util.logging.Handler {
-            private java.util.logging.Level maxLevel = java.util.logging.Level.INFO;
-
-            @Override
-            public void publish(java.util.logging.LogRecord record) {
-                if (record.getLevel().intValue() > maxLevel.intValue()) {
-                    maxLevel = record.getLevel();
-                }
-                String msg = getFormatter().format(record);
-                javafx.application.Platform.runLater(() -> logArea.appendText(msg));
-            }
-
-            @Override
-            public void flush() {
-            }
-
-            @Override
-            public void close() {
-            }
-
-            public java.util.logging.Level getMaxLevel() {
-                return maxLevel;
-            }
-        }
-
-        final var textAreaHandler = new LevelTrackingHandler();
-        textAreaHandler.setFormatter(new java.util.logging.SimpleFormatter());
-        logger.addHandler(textAreaHandler);
-
-        Platform.runLater(loadingStage::show);
-
-        new Thread(() -> {
-            final var userFactory = new UserFactory();
-            userFactory.setMailSubjects(getuAkroSubject, erwachsenSubject);
-            userFactory.setMailMessages(getuAkroText, erwachsenText);
-
-            logger.info("Starting to process users from file: " + file.getName());
-
-            final var processFile = new ProcessFile(userFactory, logger);
-            final var invalidUsers = processFile.process(file);
-
-            Platform.runLater(() -> {
-                progressBar.setProgress(1.0);
-                logger.removeHandler(textAreaHandler);
-                final var alert = new Alert(Alert.AlertType.INFORMATION);
-                if (!invalidUsers.isEmpty()) {
-                    loadingStage.close();
-                    alert.setTitle(Publ.HINWEIS);
-                    alert.setHeaderText("Ungültige Benutzer gefunden");
-                    alert.setContentText("Die ungültigen Benutzer wurden in eine Datei mit dem Zusatz _invalid geschrieben.");
-                    alert.showAndWait();
-                    Platform.exit();
-                } else if (textAreaHandler.getMaxLevel() == java.util.logging.Level.SEVERE) {
-                    alert.setTitle("Fehler");
-                    alert.setHeaderText("Es sind Fehler beim Senden aufgetreten");
-                    alert.setContentText("Bitte prüfen Sie die Log-Ausgabe für Details.");
-                    alert.showAndWait();
-                } else {
-                    loadingStage.close();
-                    alert.setTitle("Erfolg");
-                    alert.setHeaderText("E-Mails wurden erfolgreich gesendet");
-                    alert.setContentText("Alle gültigen Benutzer haben ihre E-Mails erhalten.");
-                    alert.showAndWait();
-                    Platform.exit();
-                }
-            });
-        }).start();
+    public String getAppPassword() {
+        return appPasswordField.getText();
     }
 }

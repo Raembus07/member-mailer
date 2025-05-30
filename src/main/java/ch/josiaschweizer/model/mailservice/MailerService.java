@@ -2,7 +2,6 @@ package ch.josiaschweizer.service;
 
 import ch.josiaschweizer.entity.user.User;
 import ch.josiaschweizer.publ.Publ;
-import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -22,13 +21,14 @@ public class MailerService {
     private final String password;
     private final Session session;
 
-    public MailerService(@Nonnull final Logger logger) {
+    public MailerService(@Nonnull final Logger logger,
+                         @Nonnull final String sender,
+                         @Nonnull final String appPassword) {
         this.logger = logger;
         logger.log(Level.INFO, "Initializing MailerService");
 
-        final var dotenv = Dotenv.load();
-        sender = dotenv.get("PROVIDER_EMAIL");
-        password = dotenv.get("PROVIDER_APP_PASSWORD");
+        this.sender = sender;
+        this.password = appPassword;
         final var smtpHost = "smtp.gmail.com";
         final var smtpPort = "587";
 

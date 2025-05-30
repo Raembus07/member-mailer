@@ -56,7 +56,7 @@ public class StepTwoUI {
             formulaBox.getChildren().add(btn);
         }
 
-        final var processButton = new Button("Email versenden");
+        final var processButton = new Button("Weiter");
         processButton.setOnAction(e -> {
             runnable.run();
         });
@@ -69,15 +69,14 @@ public class StepTwoUI {
     }
 
     public void show(@Nonnull final Stage stage) {
-        StageHelper.configureStage(this.stage = stage, root, "Mail-Text festlegen", true, 1200, 900);
+        StageHelper.configureStage(this.stage = stage, root, "Mail-Text festlegen", true, 1200, 800);
         stage.onCloseRequestProperty().set(event -> {
             savePrefs();
             stage.close();
         });
-        this.stage.setResizable(true);
-
         loadPrefs();
 
+        this.stage.setResizable(true);
         this.stage.show();
     }
 
