@@ -50,6 +50,7 @@ public class MainUI {
                            @Nonnull final String erwachsenSubject,
                            @Nonnull final String getuAkroText,
                            @Nonnull final String erwachsenText) {
+        stepTwoUI.getStage().close();
         final var stepThreeUI = new StepThreeUI(
                 file,
                 getuAkroSubject,

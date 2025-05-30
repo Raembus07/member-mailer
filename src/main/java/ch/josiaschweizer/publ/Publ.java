@@ -3,6 +3,7 @@ package ch.josiaschweizer.publ;
 public class Publ {
     public static final String EMPTY_STRING = "";
     public static final String SPACE = " ";
+    public static final String BACKSLASH = "\n";
 
     public static final String EGT = "EGT";
     public static final String VGT = "VGT";

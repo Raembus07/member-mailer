@@ -58,7 +58,7 @@ public class MailerService {
             message.setText(messageText);
 
             Transport.send(message);
-            final var msg = "Email sent successfully to " + user.getFirstName() + Publ.SPACE + user.getLastName() + " to email: " + email;
+            final var msg = "Email sent successfully to " + user.getFirstName() + Publ.SPACE + user.getLastName() + " to email: " + email + Publ.BACKSLASH;
             logger.log(Level.INFO, msg);
             System.out.println(msg);
             return Optional.empty();
