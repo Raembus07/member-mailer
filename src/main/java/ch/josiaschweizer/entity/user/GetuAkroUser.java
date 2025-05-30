@@ -10,25 +10,30 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-public class GetuAkro extends AbstractUser {
+public class GetuAkroUser extends AbstractUser {
     private String mailMessage = "Dies ist ein Test-E-Mail für " + firstName + " " + lastName + ".";
     private String mailSubject = Publ.UEBERPRUEFUNG_DES_GETU_AKRO_TEILNEHMERS_FIRSTNAME_LASTNAME + firstName + Publ.SPACE + lastName;
 
     private final String ahvNumber;
 
-    public GetuAkro(@Nonnull final String firstName,
-                    @Nonnull final String lastName,
-                    @Nullable final String primaryEmail,
-                    @Nullable final String secondaryEmail,
-                    @Nullable final String childEmail,
-                    @Nonnull final String street,
-                    @Nonnull final String zip,
-                    @Nonnull final String city,
-                    @Nullable final String phoneNumberPrimary,
-                    @Nullable final String phoneNumberSecondary,
-                    @Nonnull final String birthDate,
-                    @Nonnull final Riege riege,
-                    @Nullable final String ahvNumber) {
+    public GetuAkroUser() {
+        // default constructor for serialization & getDynamicVariables
+        this.ahvNumber = null;
+    }
+
+    public GetuAkroUser(@Nonnull final String firstName,
+                        @Nonnull final String lastName,
+                        @Nullable final String primaryEmail,
+                        @Nullable final String secondaryEmail,
+                        @Nullable final String childEmail,
+                        @Nonnull final String street,
+                        @Nonnull final String zip,
+                        @Nonnull final String city,
+                        @Nullable final String phoneNumberPrimary,
+                        @Nullable final String phoneNumberSecondary,
+                        @Nonnull final String birthDate,
+                        @Nonnull final Riege riege,
+                        @Nullable final String ahvNumber) {
         super.firstName = firstName;
         super.lastName = lastName;
         createEmail(primaryEmail, secondaryEmail, childEmail);

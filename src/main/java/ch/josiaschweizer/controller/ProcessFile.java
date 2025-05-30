@@ -1,10 +1,7 @@
 package ch.josiaschweizer.controller;
 
 import ch.josiaschweizer.entity.factory.UserFactory;
-import ch.josiaschweizer.entity.user.AbstractUser;
-import ch.josiaschweizer.entity.user.Erwachsen;
 import ch.josiaschweizer.entity.user.User;
-import ch.josiaschweizer.entity.user.riege.RiegeComposition;
 import ch.josiaschweizer.service.MailerService;
 
 import javax.annotation.Nonnull;

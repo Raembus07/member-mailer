@@ -7,6 +7,7 @@ public class AppLauncher extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        new MainUI().start(stage);
+        final var logger = java.util.logging.Logger.getLogger(AppLauncher.class.getName());
+        new MainUI(logger).start(stage);
     }
 }

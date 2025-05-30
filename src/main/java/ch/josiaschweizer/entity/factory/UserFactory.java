@@ -1,8 +1,8 @@
 package ch.josiaschweizer.entity.factory;
 
 import ch.josiaschweizer.entity.user.AbstractUser;
-import ch.josiaschweizer.entity.user.Erwachsen;
-import ch.josiaschweizer.entity.user.GetuAkro;
+import ch.josiaschweizer.entity.user.ErwachsenerUser;
+import ch.josiaschweizer.entity.user.GetuAkroUser;
 import ch.josiaschweizer.entity.user.riege.Riege;
 import ch.josiaschweizer.entity.user.riege.RiegeComposition;
 
@@ -44,7 +44,7 @@ public class UserFactory {
             @Nonnull final String ahvNumber) {
         final var riege = Riege.createRiege(riegeString);
         if (riege.getRiegeComposition() == RiegeComposition.GETUAKRO) {
-            final var user = new GetuAkro(
+            final var user = new GetuAkroUser(
                     firstName,
                     lastName,
                     primaryEmail,
@@ -62,7 +62,7 @@ public class UserFactory {
             user.setMailMessage(getuAkroMessage);
             return user;
         } else {
-            final var user = new Erwachsen(
+            final var user = new ErwachsenerUser(
                     firstName,
                     lastName,
                     primaryEmail,

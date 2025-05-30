@@ -8,22 +8,26 @@ import ch.josiaschweizer.publ.Publ;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class Erwachsen extends AbstractUser {
+public class ErwachsenerUser extends AbstractUser {
 
     private String mailMessage = "Dies ist ein Test-E-Mail für " + firstName + " " + lastName + ".";
     private String mailSubject = Publ.UEBERPRUEFUNG_DES_GETU_AKRO_TEILNEHMERS_FIRSTNAME_LASTNAME + "$firstname" + Publ.SPACE + "$lastName";
 
-    public Erwachsen(final String firstName,
-                     final String lastName,
-                     final String primaryEmail,
-                     final String secondaryEmail,
-                     final String street,
-                     final String zip,
-                     final String city,
-                     final String phoneNumberPrimary,
-                     final String phoneNumberSecondary,
-                     final String birthDate,
-                     final Riege riege) {
+    public ErwachsenerUser() {
+        // default constructor for serialization & getDynamicVariables
+    }
+
+    public ErwachsenerUser(final String firstName,
+                           final String lastName,
+                           final String primaryEmail,
+                           final String secondaryEmail,
+                           final String street,
+                           final String zip,
+                           final String city,
+                           final String phoneNumberPrimary,
+                           final String phoneNumberSecondary,
+                           final String birthDate,
+                           final Riege riege) {
         super.firstName = firstName;
         super.lastName = lastName;
         createEmail(primaryEmail, secondaryEmail);
@@ -80,6 +84,7 @@ public class Erwachsen extends AbstractUser {
         }
         return result;
     }
+
     @Override
     public void setMailSubject(@Nonnull final String mailSubject) {
         this.mailSubject = mailSubject;

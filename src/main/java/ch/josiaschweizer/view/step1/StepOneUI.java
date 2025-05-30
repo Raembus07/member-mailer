@@ -1,6 +1,7 @@
 package ch.josiaschweizer.view.step1;
 
 import ch.josiaschweizer.controller.ReadWriteFile;
+import ch.josiaschweizer.publ.StageHelper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -53,11 +54,7 @@ public class StepOneUI {
     }
 
     public void show() {
-
-        stage.setScene(new Scene(root, 800, 500));
-        stage.setMinWidth(500);
-        stage.setMinWidth(600);
-        stage.setTitle("CSV-Datei einlesen");
+        StageHelper.configureStage(stage, root, "CSV Datei auswählen", true);
         stage.show();
     }
 

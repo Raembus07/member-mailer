@@ -1,19 +1,9 @@
 // MainUI.java
 package ch.josiaschweizer.view;
 
-import ch.josiaschweizer.controller.ProcessFile;
-import ch.josiaschweizer.entity.factory.UserFactory;
-import ch.josiaschweizer.publ.Publ;
 import ch.josiaschweizer.view.step1.StepOneUI;
 import ch.josiaschweizer.view.step2.StepTwoUI;
 import ch.josiaschweizer.view.step3.StepThreeUI;
-import javafx.application.Platform;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javax.annotation.Nonnull;
@@ -22,10 +12,13 @@ import java.util.logging.Logger;
 
 public class MainUI {
 
-    public static final String UNGÜLTIGE_BENUTZER_GEFUNDEN = "Ungültige Benutzer gefunden";
-    private final Logger logger = Logger.getLogger(MainUI.class.getName());
+    private final Logger logger;
     private StepOneUI stepOneUI;
     private StepTwoUI stepTwoUI;
+
+    public MainUI(@Nonnull final Logger logger) {
+        this.logger = logger;
+    }
 
     public void start(Stage primaryStage) {
         final Runnable runnable = () -> showStepTwo(primaryStage);

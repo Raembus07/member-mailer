@@ -25,9 +25,9 @@ public abstract class AbstractUser implements User {
         Map<String, String> map = new HashMap<>();
         map.put("$vorname", firstName != null ? firstName : Publ.EMPTY_STRING);
         map.put("$nachname", lastName != null ? lastName : Publ.EMPTY_STRING);
-        map.put("$primary-email", email.getEmail(EmailComposition.PRIMARY) != null ? email.getEmail(EmailComposition.PRIMARY) : Publ.EMPTY_STRING);
-        map.put("$secondary-email", email.getEmail(EmailComposition.SECONDARY) != null ? email.getEmail(EmailComposition.SECONDARY) : Publ.EMPTY_STRING);
-        map.put("$child-email", email.getEmail(EmailComposition.CHILD) != null ? email.getEmail(EmailComposition.CHILD) : Publ.EMPTY_STRING);
+        map.put("$primary-email", email != null ? email.getEmail(EmailComposition.PRIMARY) != null ? email.getEmail(EmailComposition.PRIMARY) : Publ.EMPTY_STRING : Publ.EMPTY_STRING);
+        map.put("$secondary-email", email != null ? email.getEmail(EmailComposition.SECONDARY) != null ? email.getEmail(EmailComposition.SECONDARY) : Publ.EMPTY_STRING : Publ.EMPTY_STRING);
+        map.put("$child-email", email != null ? email.getEmail(EmailComposition.CHILD) != null ? email.getEmail(EmailComposition.CHILD) : Publ.EMPTY_STRING : Publ.EMPTY_STRING);
         map.put("$strasse", street != null ? street : Publ.EMPTY_STRING);
         map.put("$postleitzahl", zip != null ? zip : Publ.EMPTY_STRING);
         map.put("$ort", city != null ? city : Publ.EMPTY_STRING);
