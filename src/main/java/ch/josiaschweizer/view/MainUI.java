@@ -10,9 +10,11 @@ import javafx.stage.Stage;
 import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 
 public class MainUI {
 
+    private static final Preferences prefs = Preferences.userNodeForPackage(MainUI.class);
     private final Logger logger;
     private StepOneUI stepOneUI;
     private StepTwoUI stepTwoUI;
@@ -31,17 +33,18 @@ public class MainUI {
 
     private void showStepTwo(Stage stage) {
         file = stepOneUI.getFile();
-        stepTwoUI = new StepTwoUI(() -> {
+        stepTwoUI = new StepTwoUI(prefs, () -> {
             showStepThree(stage);
         });
         stepTwoUI.show(stage);
     }
 
     private void showStepThree(@Nonnull final Stage stage) {
-        stepThreeUI = new StepThreeUI(() -> {
+        stepThreeUI = new StepThreeUI(prefs, () -> {
             sendEmail(file,
                     stepThreeUI.getEmail(),
                     stepThreeUI.getAppPassword(),
+                    stepThreeUI.getSmtpHost(),
                     stepTwoUI.getGetuAkroSubject(),
                     stepTwoUI.getErwachsenSubject(),
                     stepTwoUI.getGetuAkroText(),
@@ -53,6 +56,7 @@ public class MainUI {
     private void sendEmail(@Nonnull final File file,
                            @Nonnull final String senderEmail,
                            @Nonnull final String appPassword,
+                           @Nonnull final String smptHost,
                            @Nonnull final String getuAkroSubject,
                            @Nonnull final String erwachsenSubject,
                            @Nonnull final String getuAkroText,
@@ -62,6 +66,7 @@ public class MainUI {
                 file,
                 senderEmail,
                 appPassword,
+                smptHost,
                 getuAkroSubject,
                 erwachsenSubject,
                 getuAkroText,

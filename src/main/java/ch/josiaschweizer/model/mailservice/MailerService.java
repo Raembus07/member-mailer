@@ -23,13 +23,13 @@ public class MailerService {
 
     public MailerService(@Nonnull final Logger logger,
                          @Nonnull final String sender,
-                         @Nonnull final String appPassword) {
+                         @Nonnull final String appPassword,
+                         @Nonnull final String smtpHost) {
         this.logger = logger;
         logger.log(Level.INFO, "Initializing MailerService");
 
         this.sender = sender;
         this.password = appPassword;
-        final var smtpHost = "smtp.gmail.com";
         final var smtpPort = "587";
 
         final var props = new Properties();

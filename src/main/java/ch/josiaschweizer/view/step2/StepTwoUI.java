@@ -3,6 +3,7 @@ package ch.josiaschweizer.view.step2;
 import ch.josiaschweizer.entity.user.AbstractUser;
 import ch.josiaschweizer.entity.user.ErwachsenerUser;
 import ch.josiaschweizer.entity.user.GetuAkroUser;
+import ch.josiaschweizer.publ.Publ;
 import ch.josiaschweizer.publ.StageHelper;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -23,12 +24,9 @@ import java.util.prefs.Preferences;
 
 public class StepTwoUI {
 
-    public static final String PREFS_GETU_AKRO_SUBJECT = "getuAkroSubject";
-    public static final String PREFS_GETU_AKRO_MAIL = "getuAkroMail";
-    public static final String PREFS_ERWACHSEN_SUBJECT = "erwachsenSubject";
-    public static final String PREFS_ERWACHSEN_MAIL = "erwachsenMail";
+    @Nonnull
+    private final Preferences prefs;
     private Stage stage;
-    private static final Preferences prefs = Preferences.userNodeForPackage(StepTwoUI.class);
 
     private final VBox root;
     private final TextArea getuAkroSubjectTextArea;
@@ -37,7 +35,9 @@ public class StepTwoUI {
     private final TextArea erwachsenMailTextArea;
     private Focus currentFocus = Focus.NOTHING;
 
-    public StepTwoUI(@Nonnull final Runnable runnable) {
+    public StepTwoUI(@Nonnull final Preferences prefs,
+                     @Nonnull final Runnable runnable) {
+        this.prefs = prefs;
         this.getuAkroSubjectTextArea = new TextArea();
         final var getuAkroSubjectArea = createTextAreaWithLabel("Betreff für Getu-Akro:", getuAkroSubjectTextArea, Focus.GETU_AKRO_SUBJECT, 4);
         this.getuAkroMailTextArea = new TextArea();
@@ -58,6 +58,7 @@ public class StepTwoUI {
 
         final var processButton = new Button("Weiter");
         processButton.setOnAction(e -> {
+            savePrefs();
             runnable.run();
         });
         final var processBox = new HBox(10, processButton);
@@ -130,17 +131,17 @@ public class StepTwoUI {
     }
 
     private void savePrefs() {
-        prefs.put(PREFS_GETU_AKRO_SUBJECT, getuAkroSubjectTextArea.getText());
-        prefs.put(PREFS_GETU_AKRO_MAIL, getuAkroMailTextArea.getText());
-        prefs.put(PREFS_ERWACHSEN_SUBJECT, erwachsenSubjectTextArea.getText());
-        prefs.put(PREFS_ERWACHSEN_MAIL, erwachsenMailTextArea.getText());
+        prefs.put(Publ.PREFS_GETU_AKRO_SUBJECT, getuAkroSubjectTextArea.getText());
+        prefs.put(Publ.PREFS_GETU_AKRO_MAIL, getuAkroMailTextArea.getText());
+        prefs.put(Publ.PREFS_ERWACHSEN_SUBJECT, erwachsenSubjectTextArea.getText());
+        prefs.put(Publ.PREFS_ERWACHSEN_MAIL, erwachsenMailTextArea.getText());
     }
 
     private void loadPrefs() {
-        getuAkroSubjectTextArea.setText(prefs.get(PREFS_GETU_AKRO_SUBJECT, ""));
-        getuAkroMailTextArea.setText(prefs.get(PREFS_GETU_AKRO_MAIL, ""));
-        erwachsenSubjectTextArea.setText(prefs.get(PREFS_ERWACHSEN_SUBJECT, ""));
-        erwachsenMailTextArea.setText(prefs.get(PREFS_ERWACHSEN_MAIL, ""));
+        getuAkroSubjectTextArea.setText(prefs.get(Publ.PREFS_GETU_AKRO_SUBJECT, ""));
+        getuAkroMailTextArea.setText(prefs.get(Publ.PREFS_GETU_AKRO_MAIL, ""));
+        erwachsenSubjectTextArea.setText(prefs.get(Publ.PREFS_ERWACHSEN_SUBJECT, ""));
+        erwachsenMailTextArea.setText(prefs.get(Publ.PREFS_ERWACHSEN_MAIL, ""));
     }
 
     public String getErwachsenSubject() {

@@ -28,11 +28,12 @@ public class ProcessFile {
     @Nonnull
     public List<User> process(@Nonnull final File file,
                               @Nonnull final String senderEmail,
-                              @Nonnull final String appPassword) {
+                              @Nonnull final String appPassword,
+                              @Nonnull final String smptHost) {
         final var users = getUsersFromFile(file);
         final List<User> invalidUsers = new ArrayList<>(List.of());
 
-        final var mailerService = new MailerService(logger, senderEmail, appPassword);
+        final var mailerService = new MailerService(logger, senderEmail, appPassword, smptHost);
         for (var user : users) {
             if (user.isValid()) {
                 final var response = mailerService.sendMail(user);

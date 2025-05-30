@@ -23,6 +23,7 @@ public class StepFourUI {
     private final File file;
     private final String senderEmail;
     private final String appPassword;
+    private final String smptHost;
     private final String getuAkroSubject;
     private final String erwachsenSubject;
     private final String getuAkroText;
@@ -31,6 +32,7 @@ public class StepFourUI {
     public StepFourUI(@Nonnull final File file,
                       @Nonnull final String senderEmail,
                       @Nonnull final String appPassword,
+                      @Nonnull final String smptHost,
                       @Nonnull final String getuAkroSubject,
                       @Nonnull final String erwachsenSubject,
                       @Nonnull final String getuAkroText,
@@ -39,6 +41,7 @@ public class StepFourUI {
         this.file = file;
         this.senderEmail = senderEmail;
         this.appPassword = appPassword;
+        this.smptHost = smptHost;
         this.getuAkroSubject = getuAkroSubject;
         this.erwachsenSubject = erwachsenSubject;
         this.getuAkroText = getuAkroText;
@@ -102,7 +105,7 @@ public class StepFourUI {
             logger.info("Starting to process users from file: " + file.getName());
 
             final var processFile = new ProcessFile(userFactory, logger);
-            final var invalidUsers = processFile.process(file, senderEmail, appPassword);
+            final var invalidUsers = processFile.process(file, senderEmail, appPassword, smptHost);
 
             Platform.runLater(() -> {
                 progressBar.setProgress(1.0);
