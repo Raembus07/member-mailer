@@ -1,83 +1,74 @@
 package ch.josiaschweizer.entity.factory;
 
 import ch.josiaschweizer.entity.user.AbstractUser;
-import ch.josiaschweizer.entity.user.ErwachsenerUser;
-import ch.josiaschweizer.entity.user.GetuAkroUser;
-import ch.josiaschweizer.entity.user.riege.Riege;
-import ch.josiaschweizer.entity.user.riege.RiegeComposition;
+import ch.josiaschweizer.entity.user.UserImpl;
+import ch.josiaschweizer.entity.user.email.Email;
+import ch.josiaschweizer.entity.user.email.EmailComposition;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class UserFactory {
 
-    private String getuAkroSubject;
-    private String getuAkroMessage;
-    private String erwachsenSubject;
-    private String erwachsenMessage;
+    private String mailSubject;
+    private String mailMessage;
 
-    public void setMailMessages(@Nonnull final String getuAkroText,
-                                @Nonnull final String erwachsenText) {
-        this.getuAkroMessage = getuAkroText;
-        this.erwachsenMessage = erwachsenText;
+    public void setMailMessage(@Nonnull final String mailMessage) {
+        this.mailMessage = mailMessage;
     }
 
-    public void setMailSubjects(@Nonnull final String getuAkroSubject,
-                                @Nonnull final String erwachsenSubject) {
-        this.getuAkroSubject = getuAkroSubject;
-        this.erwachsenSubject = erwachsenSubject;
+    public void setMailSubject(@Nonnull final String mailSubject) {
+        this.mailSubject = mailSubject;
     }
 
-    public AbstractUser createUser(
-            @Nonnull final String firstName,
-            @Nonnull final String lastName,
-            @Nullable final String primaryEmail,
-            @Nullable final String secondaryEmail,
-            @Nullable final String childEmail,
-            @Nonnull final String street,
-            @Nonnull final String zip,
-            @Nonnull final String city,
-            @Nonnull final String phoneNumberPrimary,
-            @Nonnull final String phoneNumberSecondary,
-            @Nonnull final String birthDate,
-            @Nonnull final String riegeString,
-            @Nonnull final String ahvNumber) {
-        final var riege = Riege.createRiege(riegeString);
-        if (riege.getRiegeComposition() == RiegeComposition.GETUAKRO) {
-            final var user = new GetuAkroUser(
-                    firstName,
-                    lastName,
-                    primaryEmail,
-                    secondaryEmail,
-                    childEmail,
-                    street,
-                    zip,
-                    city,
-                    phoneNumberPrimary,
-                    phoneNumberSecondary,
-                    birthDate,
-                    riege,
-                    ahvNumber);
-            user.setMailSubject(getuAkroSubject);
-            user.setMailMessage(getuAkroMessage);
-            return user;
-        } else {
-            final var user = new ErwachsenerUser(
-                    firstName,
-                    lastName,
-                    primaryEmail,
-                    secondaryEmail,
-                    street,
-                    zip,
-                    city,
-                    phoneNumberPrimary,
-                    phoneNumberSecondary,
-                    birthDate,
-                    riege);
-            user.setMailSubject(erwachsenSubject);
-            user.setMailMessage(erwachsenMessage);
-            return user;
-        }
+    public AbstractUser createUser(@Nonnull final String firstName,
+                                   @Nonnull final String lastName,
+                                   @Nonnull final String birthDate,
+                                   @Nonnull final String street,
+                                   @Nonnull final String zip,
+                                   @Nonnull final String city,
+                                   @Nonnull final String phoneNumberPrimary,
+                                   @Nonnull final String primaryEmail,
+                                   @Nonnull final String secondaryEmail,
+                                   @Nonnull final String childEmail,
+                                   @Nonnull final String phoneNumberSecondary,
+                                   @Nonnull final String eduction,
+                                   @Nonnull final String parentName1,
+                                   @Nonnull final String parentEmail1,
+                                   @Nonnull final String parentPhoneNumber1,
+                                   @Nonnull final String parentName2,
+                                   @Nonnull final String parentEmail2,
+                                   @Nonnull final String parentPhoneNumber2,
+                                   @Nonnull final String ahvNumber,
+                                   @Nonnull final String gender,
+                                   @Nonnull final String membership,
+                                   @Nonnull final String riegeString) {
+        final var user = new UserImpl(
+                firstName,
+                lastName,
+                birthDate,
+                street,
+                zip,
+                city,
+                phoneNumberPrimary,
+                primaryEmail,
+                secondaryEmail,
+                childEmail,
+                phoneNumberSecondary,
+                eduction,
+                parentName1,
+                parentEmail1,
+                parentPhoneNumber1,
+                parentName2,
+                parentEmail2,
+                parentPhoneNumber2,
+                ahvNumber,
+                gender,
+                membership,
+                riegeString);
+        user.setMailSubject(mailSubject);
+        user.setMailMessage(mailMessage);
+        return user;
     }
 }
 

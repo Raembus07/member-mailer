@@ -45,10 +45,9 @@ public class MainUI {
                     stepThreeUI.getEmail(),
                     stepThreeUI.getAppPassword(),
                     stepThreeUI.getSmtpHost(),
-                    stepTwoUI.getGetuAkroSubject(),
-                    stepTwoUI.getErwachsenSubject(),
-                    stepTwoUI.getGetuAkroText(),
-                    stepTwoUI.getErwachsenText());
+                    stepTwoUI.getSubjectText(),
+                    stepTwoUI.getMailText()
+            );
         });
         stepThreeUI.show(stage);
     }
@@ -57,20 +56,16 @@ public class MainUI {
                            @Nonnull final String senderEmail,
                            @Nonnull final String appPassword,
                            @Nonnull final String smptHost,
-                           @Nonnull final String getuAkroSubject,
-                           @Nonnull final String erwachsenSubject,
-                           @Nonnull final String getuAkroText,
-                           @Nonnull final String erwachsenText) {
+                           @Nonnull final String subject,
+                           @Nonnull final String mailText) {
         stepTwoUI.getStage().close();
         final var stepThreeUI = new StepFourUI(
                 file,
                 senderEmail,
                 appPassword,
                 smptHost,
-                getuAkroSubject,
-                erwachsenSubject,
-                getuAkroText,
-                erwachsenText,
+                subject,
+                mailText,
                 logger
         );
         stepThreeUI.show();

@@ -24,28 +24,22 @@ public class StepFourUI {
     private final String senderEmail;
     private final String appPassword;
     private final String smptHost;
-    private final String getuAkroSubject;
-    private final String erwachsenSubject;
-    private final String getuAkroText;
-    private final String erwachsenText;
+    private final String mailSubject;
+    private final String mailText;
 
     public StepFourUI(@Nonnull final File file,
                       @Nonnull final String senderEmail,
                       @Nonnull final String appPassword,
                       @Nonnull final String smptHost,
-                      @Nonnull final String getuAkroSubject,
-                      @Nonnull final String erwachsenSubject,
-                      @Nonnull final String getuAkroText,
-                      @Nonnull final String erwachsenText,
+                      @Nonnull final String mailSubject,
+                      @Nonnull final String mailText,
                       @Nonnull final Logger logger) {
         this.file = file;
         this.senderEmail = senderEmail;
         this.appPassword = appPassword;
         this.smptHost = smptHost;
-        this.getuAkroSubject = getuAkroSubject;
-        this.erwachsenSubject = erwachsenSubject;
-        this.getuAkroText = getuAkroText;
-        this.erwachsenText = erwachsenText;
+        this.mailSubject = mailSubject;
+        this.mailText = mailText;
         this.logger = logger;
     }
 
@@ -99,8 +93,8 @@ public class StepFourUI {
 
         new Thread(() -> {
             final var userFactory = new UserFactory();
-            userFactory.setMailSubjects(getuAkroSubject, erwachsenSubject);
-            userFactory.setMailMessages(getuAkroText, erwachsenText);
+            userFactory.setMailSubject(mailSubject);
+            userFactory.setMailMessage(mailText);
 
             logger.info("Starting to process users from file: " + file.getName());
 

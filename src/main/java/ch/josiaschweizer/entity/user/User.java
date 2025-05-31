@@ -1,7 +1,6 @@
 package ch.josiaschweizer.entity.user;
 
 import ch.josiaschweizer.entity.user.email.Email;
-import ch.josiaschweizer.entity.user.riege.Riege;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -40,6 +39,6 @@ public interface User {
 
     String getBirthDate();
 
-    Riege getRiege();
+    String getRiege();
 
 }

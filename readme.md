@@ -63,7 +63,3 @@ jpackage \
 ```
   /Applications/MemberMailer.app/Contents/MacOS/MemberMailer
  ```
-
-### Credentials
-- email adress: raembus@gmail.com
-- apppassword: hpbf hjwt fdyr ggto

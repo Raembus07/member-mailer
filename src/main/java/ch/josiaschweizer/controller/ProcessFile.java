@@ -2,6 +2,7 @@ package ch.josiaschweizer.controller;
 
 import ch.josiaschweizer.entity.factory.UserFactory;
 import ch.josiaschweizer.entity.user.User;
+import ch.josiaschweizer.model.fileio.Writer;
 import ch.josiaschweizer.service.MailerService;
 
 import javax.annotation.Nonnull;
@@ -18,6 +19,8 @@ public class ProcessFile {
     final UserFactory userFactory;
     @Nonnull
     final Logger logger;
+    private Map<String, Integer> headerMap;
+    private File file;
 
     public ProcessFile(@Nonnull final UserFactory userFactory,
                        @Nonnull final Logger logger) {
@@ -30,6 +33,7 @@ public class ProcessFile {
                               @Nonnull final String senderEmail,
                               @Nonnull final String appPassword,
                               @Nonnull final String smptHost) {
+        this.file = file;
         final var users = getUsersFromFile(file);
         final List<User> invalidUsers = new ArrayList<>(List.of());
 
@@ -59,7 +63,7 @@ public class ProcessFile {
     }
 
     private List<User> extractUsers(List<List<String>> data) {
-        final Map<String, Integer> headerMap = new HashMap<>();
+        headerMap = new HashMap<>();
 
         final var header = data.get(0);
         for (int i = 0; i < header.size(); i++) {
@@ -70,34 +74,29 @@ public class ProcessFile {
         for (int i = 1; i < data.size(); i++) {
             final var row = data.get(i);
 
-            final var firstName = getByHeaderProperty(row, "Vorname", headerMap);
-            final var lastName = getByHeaderProperty(row, "Nachname", headerMap);
-            final var primaryEmail = getByHeaderProperty(row, "Primäre E-Mail", headerMap);
-            final var secondaryEmail = getByHeaderProperty(row, "E-Mail 2", headerMap);
-            final var childEmail = getByHeaderProperty(row, "E-Mail Kinder bis 18 J.", headerMap);
-            final var street = getByHeaderProperty(row, "Strasse (Korr.)", headerMap);
-            final var zip = getByHeaderProperty(row, "PLZ (Korr.)", headerMap);
-            final var city = getByHeaderProperty(row, "Ort (Korr.)", headerMap);
-            final var phoneNumberPrimary = getByHeaderProperty(row, "Handy", headerMap);
-            final var phoneNumberSecondary = getByHeaderProperty(row, "Telefon Privat", headerMap);
-            final var birthDate = getByHeaderProperty(row, "Geburtsdatum", headerMap);
-            final var riegeString = getByHeaderProperty(row, "Riegen [21/21]", headerMap);
-            final var ahvNumber = getByHeaderProperty(row, "Sozialversicherungsnr", headerMap);
-
             users.add(userFactory.createUser(
-                    firstName,
-                    lastName,
-                    primaryEmail,
-                    secondaryEmail,
-                    childEmail,
-                    street,
-                    zip,
-                    city,
-                    phoneNumberPrimary,
-                    phoneNumberSecondary,
-                    birthDate,
-                    riegeString,
-                    ahvNumber));
+                    getByHeaderProperty(row, "Vorname", headerMap),
+                    getByHeaderProperty(row, "Nachname", headerMap),
+                    getByHeaderProperty(row, "Geburtsdatum", headerMap),
+                    getByHeaderProperty(row, "Strasse (Korr.)", headerMap),
+                    getByHeaderProperty(row, "PLZ (Korr.)", headerMap),
+                    getByHeaderProperty(row, "Ort (Korr.)", headerMap),
+                    getByHeaderProperty(row, "Handy", headerMap),
+                    getByHeaderProperty(row, "Primäre E-Mail", headerMap),
+                    getByHeaderProperty(row, "E-Mail 2", headerMap),
+                    getByHeaderProperty(row, "E-Mail Kinder bis 18 J.", headerMap),
+                    getByHeaderProperty(row, "Telefon privat", headerMap),
+                    getByHeaderProperty(row, "Ausbildung", headerMap),
+                    getByHeaderProperty(row, "Elternteil 1", headerMap),
+                    getByHeaderProperty(row, "E-Mail Eltern 1", headerMap),
+                    getByHeaderProperty(row, "Handy Eltern 1", headerMap),
+                    getByHeaderProperty(row, "Elternteil 2", headerMap),
+                    getByHeaderProperty(row, "E-Mail Eltern 2", headerMap),
+                    getByHeaderProperty(row, "Handy Eltern 2", headerMap),
+                    getByHeaderProperty(row, "Sozialversicherungsnr", headerMap),
+                    getByHeaderProperty(row, "Geschlecht", headerMap),
+                    getByHeaderProperty(row, "Mitgliedschaft", headerMap),
+                    getByHeaderProperty(row, "Riegen [21/21]", headerMap)));
         }
 
         return users;
@@ -112,6 +111,14 @@ public class ProcessFile {
     }
 
     private void handleInvalidUsers(@Nonnull final List<User> invalidUsers) {
-
+        final var invalidFileName = file.getAbsolutePath().replaceFirst("(\\.\\w+)$", "_invalid$1");
+        final var invalidFile = new File(invalidFileName);
+        final var headerLine = String.join(", ", headerMap.keySet());
+        final var fileContent = new ArrayList<String>();
+        fileContent.add(headerLine);
+        for (User user : invalidUsers) {
+            fileContent.add(user.getPropertiesAsString());
+        }
+        Writer.write(invalidFile, fileContent);
     }
 }
