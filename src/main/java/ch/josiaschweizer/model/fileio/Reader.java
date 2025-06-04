@@ -7,21 +7,23 @@ import java.util.*;
 
 public class Reader {
 
-    public static List<List<String>> read(@Nonnull final File file) throws IOException {
+    public static List<List<String>> read(@Nonnull final File file,
+                                          @Nonnull final Character delimiter) throws IOException {
         List<List<String>> result = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                result.add(parseLine(line));
+                result.add(parseLine(line, delimiter));
             }
         }
 
         return result;
     }
 
-    private static List<String> parseLine(String line) {
+    private static List<String> parseLine(@Nonnull final String line,
+                                          @Nonnull final Character delimiter) {
         List<String> fields = new ArrayList<>();
         StringBuilder current = new StringBuilder();
         boolean inQuotes = false;
@@ -36,7 +38,7 @@ public class Reader {
                 } else {
                     inQuotes = !inQuotes;
                 }
-            } else if (c == ',' && !inQuotes) {
+            } else if (c == delimiter && !inQuotes) {
                 fields.add(current.toString().trim());
                 current.setLength(0);
             } else {

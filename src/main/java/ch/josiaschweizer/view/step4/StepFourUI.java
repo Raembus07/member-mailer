@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 public class StepFourUI {
     private final Stage loadingStage = new Stage();
     private final Logger logger;
+    private final Character delimiter;
     private final File file;
     private final String senderEmail;
     private final String appPassword;
@@ -33,7 +34,8 @@ public class StepFourUI {
                       @Nonnull final String smptHost,
                       @Nonnull final String mailSubject,
                       @Nonnull final String mailText,
-                      @Nonnull final Logger logger) {
+                      @Nonnull final Logger logger,
+                      @Nonnull final Character delimiter) {
         this.file = file;
         this.senderEmail = senderEmail;
         this.appPassword = appPassword;
@@ -41,6 +43,7 @@ public class StepFourUI {
         this.mailSubject = mailSubject;
         this.mailText = mailText;
         this.logger = logger;
+        this.delimiter = delimiter;
     }
 
     public void show() {
@@ -98,7 +101,7 @@ public class StepFourUI {
 
             logger.info("Starting to process users from file: " + file.getName());
 
-            final var processFile = new ProcessFile(userFactory, logger);
+            final var processFile = new ProcessFile(userFactory, logger, delimiter);
             final var invalidUsers = processFile.process(file, senderEmail, appPassword, smptHost);
 
             Platform.runLater(() -> {

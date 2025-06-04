@@ -4,7 +4,6 @@ import ch.josiaschweizer.controller.ReadWriteFile;
 import ch.josiaschweizer.publ.StageHelper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -29,6 +28,8 @@ public class StepOneUI {
     private final TextField filePathField;
     @Nonnull
     private final Button forwardButton;
+    @Nonnull
+    private final ComboBox<String> delimiterCombo;
     private final VBox root;
     private File file;
 
@@ -38,7 +39,18 @@ public class StepOneUI {
 
         final var loadButton = new Button("CSV-Datei auswählen");
         loadButton.setOnAction(e -> loadCSV(stage));
-        final var loadButtonBox = new HBox(10, loadButton);
+
+        delimiterCombo = new ComboBox<>();
+        delimiterCombo.getItems().addAll(",", ";", "\t", "|");
+        delimiterCombo.setValue(",");
+        delimiterCombo.setPromptText("Delimiter");
+        delimiterCombo.setOnAction(e -> {
+            if (file != null) {
+                processCSV(file);
+            }
+        });
+
+        final var loadSection = new HBox(10, loadButton, new Label("Delimiter:"), delimiterCombo);
 
         filePathField = new TextField();
         filePathField.setEditable(false);
@@ -49,7 +61,7 @@ public class StepOneUI {
         final var forwardButtonBox = new HBox(10, forwardButton);
         forwardButtonBox.setAlignment(Pos.BOTTOM_RIGHT);
 
-        root = new VBox(10, loadButtonBox, filePathField, tableView, forwardButtonBox);
+        root = new VBox(10, loadSection, filePathField, tableView, forwardButtonBox);
         root.setPadding(new javafx.geometry.Insets(10));
     }
 
@@ -72,7 +84,8 @@ public class StepOneUI {
     }
 
     private void processCSV(@Nonnull final File file) {
-        List<List<String>> data = readWriteFile.readFile(file);
+        final var delimiter = delimiterCombo.getValue().charAt(0);
+        List<List<String>> data = readWriteFile.readFile(file, delimiter);
         tableView.getItems().clear();
         tableView.getColumns().clear();
 
@@ -91,7 +104,13 @@ public class StepOneUI {
         }
     }
 
+    @Nonnull
     public File getFile() {
         return file;
+    }
+
+    @Nonnull
+    public char getDelimiter() {
+        return delimiterCombo.getValue().charAt(0);
     }
 }

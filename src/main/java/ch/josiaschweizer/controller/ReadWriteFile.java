@@ -9,9 +9,10 @@ import java.util.List;
 
 public class ReadWriteFile {
 
-    public List<List<String>> readFile(@Nonnull final File file) {
+    public List<List<String>> readFile(@Nonnull final File file,
+                                       @Nonnull final Character delimiter) {
         try {
-            return Reader.read(file);
+            return Reader.read(file, delimiter);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

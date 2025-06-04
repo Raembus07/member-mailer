@@ -19,13 +19,17 @@ public class ProcessFile {
     final UserFactory userFactory;
     @Nonnull
     final Logger logger;
+    @Nonnull
+    private final Character delimiter;
     private Map<String, Integer> headerMap;
     private File file;
 
     public ProcessFile(@Nonnull final UserFactory userFactory,
-                       @Nonnull final Logger logger) {
+                       @Nonnull final Logger logger,
+                       @Nonnull final Character delimiter) {
         this.userFactory = userFactory;
         this.logger = logger;
+        this.delimiter = delimiter;
     }
 
     @Nonnull
@@ -34,7 +38,7 @@ public class ProcessFile {
                               @Nonnull final String appPassword,
                               @Nonnull final String smptHost) {
         this.file = file;
-        final var users = getUsersFromFile(file);
+        final var users = getUsersFromFile(file, delimiter);
         final List<User> invalidUsers = new ArrayList<>(List.of());
 
         final var mailerService = new MailerService(logger, senderEmail, appPassword, smptHost);
@@ -57,8 +61,9 @@ public class ProcessFile {
         return invalidUsers;
     }
 
-    private List<User> getUsersFromFile(@Nonnull final File file) {
-        final var data = new ReadWriteFile().readFile(file);
+    private List<User> getUsersFromFile(@Nonnull final File file,
+                                        @Nonnull final Character delimiter) {
+        final var data = new ReadWriteFile().readFile(file, delimiter);
         return extractUsers(data);
     }
 

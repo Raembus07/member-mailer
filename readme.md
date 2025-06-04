@@ -57,7 +57,7 @@ jpackage \
   --main-class ch.josiaschweizer.MemberMailer \
   --type dmg \
   --icon icon.icns \
-  --dest installer/installer \
+  --dest installer/ \
   --runtime-image custom-runtime
 ```
 ```

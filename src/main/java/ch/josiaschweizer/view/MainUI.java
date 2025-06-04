@@ -20,6 +20,7 @@ public class MainUI {
     private StepTwoUI stepTwoUI;
     private StepThreeUI stepThreeUI;
     private File file;
+    private Character delimiter = ',';
 
     public MainUI(@Nonnull final Logger logger) {
         this.logger = logger;
@@ -33,6 +34,7 @@ public class MainUI {
 
     private void showStepTwo(Stage stage) {
         file = stepOneUI.getFile();
+        this.delimiter = stepOneUI.getDelimiter();
         stepTwoUI = new StepTwoUI(prefs, () -> {
             showStepThree(stage);
         });
@@ -66,7 +68,8 @@ public class MainUI {
                 smptHost,
                 subject,
                 mailText,
-                logger
+                logger,
+                delimiter
         );
         stepThreeUI.show();
     }
